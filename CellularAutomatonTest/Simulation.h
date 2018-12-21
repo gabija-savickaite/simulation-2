@@ -7,14 +7,6 @@
 
 class Simulation : public CellularAutomaton
 {
-	enum Cell
-	{
-		C,
-		R,
-		S,
-		E
-	};
-
 public:
 	Simulation(const Config& config, const Application& app);
 
@@ -25,19 +17,13 @@ public:
 	static void Simulation::openFiles();
 	static void Simulation::closeFiles();
 
-	//std::vector<sf::Vertex> getNeighbours(unsigned x, unsigned y);
-
 private:
-	std::vector<Cell> m_cells;
+	int n_cells[250][250];
 
 	float tau;
 	float delta_c;
 	float delta_r;
 	float delta_s0;
-
-	/*std::ofstream* populationC;
-	std::ofstream* populationR;
-	std::ofstream* populationS;*/
 
 	void Simulation::count_neighbours(unsigned x, unsigned y);
 };

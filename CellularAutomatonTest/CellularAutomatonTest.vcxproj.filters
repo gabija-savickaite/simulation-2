@@ -25,9 +25,6 @@
     <Filter Include="Source Files\Native">
       <UniqueIdentifier>{95450677-75a0-45fa-b2a7-7242831a5d90}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\GameOfLife">
-      <UniqueIdentifier>{01a65359-d3da-4c71-ac03-7b315a02b5d1}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -59,9 +56,6 @@
     </ClCompile>
     <ClCompile Include="Win32.cpp">
       <Filter>Source Files\Native</Filter>
-    </ClCompile>
-    <ClCompile Include="H:\Year 3\COMP3200\CellularAutomaton\Source\GameOfLife\GameOfLife.cpp">
-      <Filter>Source Files\GameOfLife</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -106,9 +100,6 @@
     </ClInclude>
     <ClInclude Include="Win32.h">
       <Filter>Source Files\Native</Filter>
-    </ClInclude>
-    <ClInclude Include="H:\Year 3\COMP3200\CellularAutomaton\Source\GameOfLife\GameOfLife.h">
-      <Filter>Source Files\GameOfLife</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

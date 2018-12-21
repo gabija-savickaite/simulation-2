@@ -35,7 +35,7 @@ void Application::run()
 	sf::Clock deltaClock;
 	unsigned year = 0;
 	m_window.setKeyRepeatEnabled(false);
-	while (m_window.isOpen() && count <= 500) {
+	while (m_window.isOpen() && count <= 5000) {
 		m_guiText.setString("Generation: " + std::to_string(year++));
 		m_fpsCounter.update();
 
@@ -46,7 +46,7 @@ void Application::run()
 		pollEvents();
 
 		count++;
-		std::cout << count << "\n";
+		//std::cout << count << "\n";
 	}
 	//Simulation::closeFiles();
 }

@@ -30,7 +30,7 @@ namespace
 		if (!inFile.is_open()) {
 			std::cout << "Unable to load config, making default settings\n";
 			config =
-			{ { 960, 960 }, 8 };
+			{ { 1000, 1000 }, 4 };
 			return;
 		}
 		std::string line;

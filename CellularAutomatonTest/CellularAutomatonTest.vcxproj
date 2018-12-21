@@ -148,7 +148,6 @@
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="CellularAutomaton.cpp" />
     <ClCompile Include="FPSCounter.cpp" />
-    <ClCompile Include="H:\Year 3\COMP3200\CellularAutomaton\Source\GameOfLife\GameOfLife.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Random.cpp" />
@@ -162,7 +161,6 @@
     <ClInclude Include="CellularAutomaton.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="FPSCounter.h" />
-    <ClInclude Include="H:\Year 3\COMP3200\CellularAutomaton\Source\GameOfLife\GameOfLife.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Native.h" />
     <ClInclude Include="NonCopyable.h" />

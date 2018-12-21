@@ -31,37 +31,29 @@ unsigned long xorshf96(void) {          //period 2^96-1
 
 Simulation::Simulation(const Config & config, const Application& app)
 	: CellularAutomaton(config, app)
-	, m_cells(config.simSize.x * config.simSize.y)
 {
 	tau = 0.75;
 	delta_c = 0.3333;
 	delta_r = 0.3125;
 	delta_s0 = 0.25;
+	sf::Color colours[4]
+	{
+		sf::Color::Red,
+		sf::Color::Green,
+		sf::Color::Blue,
+		sf::Color::Black
+	};
 
 	std::mt19937 rng((unsigned)std::time(nullptr));
 	cellForEach([&](unsigned x, unsigned y)
 	{
-		unsigned index = getCellIndex(x, y);
 		std::uniform_int_distribution<int> dist(0, 3);
 
-		auto& cell = m_cells[index];
-		cell = (Cell)dist(rng);
+		int& cell = n_cells[y][x];
+		cell = (int)dist(rng);
 
-		switch (cell)
-		{
-		case Cell::C:
-			CellularAutomaton::setCellColour(x, y, sf::Color::Red);
-			break;
-		case Cell::R:
-			CellularAutomaton::setCellColour(x, y, sf::Color::Green);
-			break;
-		case Cell::S:
-			CellularAutomaton::setCellColour(x, y, sf::Color::Blue);
-			break;
-		case Cell::E:
-			CellularAutomaton::setCellColour(x, y, sf::Color::Black);
-			break;
-		}
+		CellularAutomaton::setCellColour(x, y, colours[cell]);
+
 	});
 
 	populationC.open("C:/Users/gs1n15/Documents/populations/populationC.txt");
@@ -86,7 +78,6 @@ static unsigned countC, countR, countS, countE;
 
 void Simulation::openFiles()
 {
-	std::cout << "files opened";
 	populationC.open("C:/Users/gs1n15/Documents/populations/populationC.txt");
 	populationR.open("C:/Users/gs1n15/Documents/populations/populationR.txt");
 	populationS.open("C:/Users/gs1n15/Documents/populations/populationS.txt");
@@ -97,7 +88,6 @@ void Simulation::closeFiles()
 	populationC.close();
 	populationR.close();
 	populationS.close();
-	std::cout << "files closed";
 }
 
 void Simulation::countPopulations()
@@ -108,22 +98,22 @@ void Simulation::countPopulations()
 	cellForEach([&](unsigned x, unsigned y)
 	{
 		sf::Vector2i loc(x, y);
-		auto cell = m_cells[getCellIndex(x, y)];
+		int cell = n_cells[y][x];
 		switch (cell)
 		{
-		case Cell::C:
+		case 0:
 			population_c++;
 			break;
-		case Cell::R:
+		case 1:
 			population_r++;
 			break;
-		case Cell::S:
+		case 2:
 			population_s++;
 			break;
 		}
 	});
 
-	populationC.open("C:/Users/gs1n15/Documents/populations/populationC.txt", std::ios_base::app);
+	/*populationC.open("C:/Users/gs1n15/Documents/populations/populationC.txt", std::ios_base::app);
 	populationR.open("C:/Users/gs1n15/Documents/populations/populationR.txt", std::ios_base::app);
 	populationS.open("C:/Users/gs1n15/Documents/populations/populationS.txt", std::ios_base::app);
 
@@ -133,43 +123,28 @@ void Simulation::countPopulations()
 
 	populationC.close();
 	populationR.close();
-	populationS.close();
+	populationS.close();*/
 }
+
+int neighbours[4];
 
 void Simulation::count_neighbours(unsigned x, unsigned y)
 {
 	//benchmark_start();
-	countC = 0;
-	countR = 0;
-	countS = 0;
-	countE = 0;
+	for (int i = 0; i < 4; i++)
+		neighbours[i] = 0;
 
-	for (int nX = -60; nX <= 60; nX++)    //check neighbours
+	for (int nX = -1; nX <= 1; nX++)    //check neighbours
 	{
-		for (int nY = -60; nY <= 60; nY++)
+		for (int nY = -1; nY <= 1; nY++)
 		{
 			if (!(nX == 0 && nY == 0)) //Cell itself
 			{
 				int newX = (nX + x) % (int)m_pConfig->simSize.x;
 				int newY = (nY + y) % (int)m_pConfig->simSize.y;
 
-				auto cell = m_cells[getCellIndex(newX, newY)];
-
-				switch (cell)
-				{
-				case Cell::C:
-					countC++;
-					break;
-				case Cell::R:
-					countR++;
-					break;
-				case Cell::S:
-					countS++;
-					break;
-				case Cell::E:
-					countE++;
-					break;
-				}
+				int cell = n_cells[newY][newX];
+				neighbours[cell]++;
 			}
 		}
 	}
@@ -178,36 +153,26 @@ void Simulation::count_neighbours(unsigned x, unsigned y)
 
 void Simulation::update()
 {
-	for (int i = 0; i < 14400; i++)
+	for (int i = 0; i < 62500; i++)
 	{
-		//std::uniform_int_distribution<int> dist(0, 119);
 
-		unsigned x = xorshf96() % 120;
-		unsigned y = xorshf96() % 120;
+		unsigned x = xorshf96() % 250;
+		unsigned y = xorshf96() % 250;
 
 		sf::Vector2i loc(x, y);
 
-		int index = getCellIndex(x, y);
-		auto cell = m_cells[index];
-
-		if (cell == Cell::E)
+		int cell = n_cells[y][x];
+		if (cell == 3)
 		{
 			count_neighbours(x, y);
 
 			double fractions[] =
-			{ (double)countC / 14399.0,
-				(double)countR / 14399.0,
-				(double)countS / 14399.0,
-				(double)countE / 14399.0 };
-
-			Cell cells[] =
-			{ Cell::C,
-				Cell::R,
-				Cell::S,
-				Cell::E };
+			{ (double)neighbours[0] / 8.0,
+				(double)neighbours[1] / 8.0,
+				(double)neighbours[2] / 8.0,
+				(double)neighbours[3] / 8.0 };
 
 			double random = xorshf96() % 100 / 100.0;
-			//std::discrete_distribution<> d(std::begin(fractions), std::end(fractions));
 			unsigned ind;
 			if (random < fractions[0])
 				ind = 0;
@@ -215,77 +180,50 @@ void Simulation::update()
 				ind = 1;
 			else if (random >= fractions[0] + fractions[1] && random < fractions[0] + fractions[1] + fractions[2])
 				ind = 2;
-			else //if (random >= fractions[0] + fractions[1] + fractions[2] && random < fractions[0] + fractions[1] + fractions[2] + fractions[3])
+			else
 				ind = 3;
-			m_cells[index] = cells[ind];
-			//std::cout << ind << "\n";
+			n_cells[y][x] = ind;
 		}
-		else if (cell == Cell::C)
+		else if (cell == 0)
 		{
 			if ((double)(xorshf96() % 100) / 100.0 <= delta_c)
-				m_cells[index] = Cell::E;
+				n_cells[y][x] = 3;
 		}
-		else if (cell == Cell::R)
+		else if (cell == 1)
 		{
 			if ((double)(xorshf96() % 100) / 100.0 <= delta_r)
-				m_cells[index] = Cell::E;
+				n_cells[y][x] = 3;
 		}
-		else if (cell = Cell::S)
+		else if (cell = 2)
 		{
 			count_neighbours(x, y);
-			double prob = delta_s0 + tau * ((double)countC / 14399.0);
+			double prob = delta_s0 + tau * ((double)neighbours[0] / 8.0);
 			if ((double)(xorshf96() % 100) / 100.0 <= prob)
-				m_cells[index] = Cell::E;
+				n_cells[y][x] = 3;
 		}
 		//benchmark_end();
 	}
-	/*for (auto& update : updates) {
-		m_cells[getCellIndex(update.first.x, update.first.y)] = update.second;
-
-		switch (update.second)
-		{
-		case Cell::C:
-			CellularAutomaton::setCellColour(update.first.x, update.first.y, sf::Color::Red);
-			break;
-		case Cell::R:
-			CellularAutomaton::setCellColour(update.first.x, update.first.y, sf::Color::Green);
-			break;
-		case Cell::S:
-			CellularAutomaton::setCellColour(update.first.x, update.first.y, sf::Color::Blue);
-			break;
-		case Cell::E:
-			CellularAutomaton::setCellColour(update.first.x, update.first.y, sf::Color::Black);
-			break;
-		}
-	}*/
-
 	cellForEach([&](unsigned x, unsigned y)
 	{
-		int index = getCellIndex(x, y);
-		auto cell = m_cells[index];
+		unsigned cell = n_cells[y][x];
 		
 		switch (cell)
 		{
-		case Cell::C:
+		case 0:
 			CellularAutomaton::setCellColour(x, y, sf::Color::Red);
 			break;
-		case Cell::R:
+		case 1:
 			CellularAutomaton::setCellColour(x, y, sf::Color::Green);
 			break;
-		case Cell::S:
+		case 2:
 			CellularAutomaton::setCellColour(x, y, sf::Color::Blue);
 			break;
-		case Cell::E:
+		case 3:
 			CellularAutomaton::setCellColour(x, y, sf::Color::Black);
 			break;
 		}
 	});
 
-	countPopulations();
+	//countPopulations();
 	//benchmark_end();
 }
-
-//std::vector<sf::Vertex> Simulation::getNeighbours(unsigned x, unsigned y)
-//{
-//	
-//}
