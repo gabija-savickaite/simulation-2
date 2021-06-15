@@ -1,5 +1,4 @@
-#ifndef RANDOM_H_INCLUDED
-#define RANDOM_H_INCLUDED
+#pragma once
 
 #include <random>
 
@@ -19,5 +18,3 @@ private:
 
 	std::mt19937 m_rng;
 };
-
-#endif // RANDOM_H_INCLUDED

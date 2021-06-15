@@ -1,11 +1,10 @@
-#ifndef APPLICATION_H_INCLUDED
-#define APPLICATION_H_INCLUDED
+#pragma once
 
 #include <memory>
 #include <SFML/Graphics.hpp>
 
 #include "CellularAutomaton.h"
-#include "./FPSCounter.h"
+#include "FPSCounter.h"
 #include "Keyboard.h"
 
 struct Config;
@@ -27,7 +26,7 @@ public:
 
 private:
 	void pollEvents();
-	void input(float dt);
+	void step(float dt);
 	void render();
 
 	void resetView();
@@ -43,6 +42,4 @@ private:
 	const Config* m_pConfig = nullptr;
 	float m_zoom = 1;
 };
-
-#endif // APPLICATION_H_INCLUDED
 

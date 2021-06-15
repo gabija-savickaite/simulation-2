@@ -19,9 +19,6 @@
     <Filter Include="Source Files\Util">
       <UniqueIdentifier>{17483d7b-3f7a-4459-80e7-0e7b0f570784}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\ResourceManager">
-      <UniqueIdentifier>{71ea4101-8cb2-4d9a-8cff-de9b85c51c1a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Native">
       <UniqueIdentifier>{95450677-75a0-45fa-b2a7-7242831a5d90}</UniqueIdentifier>
     </Filter>
@@ -48,14 +45,14 @@
     <ClCompile Include="Random.cpp">
       <Filter>Source Files\Util</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceHolder.cpp">
-      <Filter>Source Files\ResourceManager</Filter>
-    </ClCompile>
     <ClCompile Include="Unix.cpp">
       <Filter>Source Files\Native</Filter>
     </ClCompile>
     <ClCompile Include="Win32.cpp">
       <Filter>Source Files\Native</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceHolder.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -77,20 +74,8 @@
     <ClInclude Include="FPSCounter.h">
       <Filter>Source Files\Util</Filter>
     </ClInclude>
-    <ClInclude Include="NonCopyable.h">
-      <Filter>Source Files\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="NonMoveable.h">
-      <Filter>Source Files\Util</Filter>
-    </ClInclude>
     <ClInclude Include="Random.h">
       <Filter>Source Files\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="ResourceHolder.h">
-      <Filter>Source Files\ResourceManager</Filter>
-    </ClInclude>
-    <ClInclude Include="ResourceManager.h">
-      <Filter>Source Files\ResourceManager</Filter>
     </ClInclude>
     <ClInclude Include="Native.h">
       <Filter>Source Files\Native</Filter>
@@ -100,6 +85,12 @@
     </ClInclude>
     <ClInclude Include="Win32.h">
       <Filter>Source Files\Native</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceHolder.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

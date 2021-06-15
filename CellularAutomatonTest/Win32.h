@@ -1,5 +1,4 @@
-#ifndef WIN32_H_INCLUDED
-#define WIN32_H_INCLUDED
+#pragma once
 
 #include <ostream>
 
@@ -30,5 +29,3 @@ enum class TextColour
 std::ostream& operator<< (std::ostream& stream, TextColour t);
 
 #endif // __WIN32
-
-#endif // WIN32_H_INCLUDED

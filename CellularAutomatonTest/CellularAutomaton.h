@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <vector>
-#include "./Config.h"
+#include "Config.h"
 
 class Application;
 
@@ -37,8 +37,10 @@ protected:
 template<typename Func>
 void CellularAutomaton::cellForEach(Func function)
 {
-	for (unsigned y = 0; y < m_pConfig->simSize.y; y++) {
-		for (unsigned x = 0; x < m_pConfig->simSize.x; x++) {
+	for (unsigned y = 0; y < m_pConfig->simSize.y; y++)
+	{
+		for (unsigned x = 0; x < m_pConfig->simSize.x; x++)
+		{
 			function(x, y);
 		}
 	}

@@ -1,8 +1,11 @@
-#ifndef CONFIG_H_INCLUDED
-#define CONFIG_H_INCLUDED
+#pragma once
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+
+const static int NUM_CELL_TYPES = 4;
+const static double NUM_NEIGHBOURING_CELLS = 8;
+
 struct Config
 {
 	Config() = default;
@@ -24,11 +27,9 @@ struct Config
 
 	sf::Vector2u windowSize = { 1280, 720 };
 	sf::Vector2u simSize;
-	unsigned cellSize = 4;
-	unsigned fps = 30;
+	unsigned int cellSize = 4;
+	unsigned int fps = 30;
 
 	sf::Color bgColour = { 150, 150, 150 };
 	sf::Color fgColour = { 25, 25, 25 };
 };
-
-#endif // CONFIG_H_INCLUDED

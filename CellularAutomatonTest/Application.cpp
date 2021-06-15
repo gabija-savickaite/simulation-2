@@ -1,16 +1,14 @@
-#include "Application.h"
-#include "Simulation.h"
-
 #include <iostream>
 #include <fstream>
 #include <ctime>
 #include <thread>
 
-#include "./Random.h"
-#include "./Config.h"
-#include "./Native.h"
-
-#include "./ResourceHolder.h"
+#include "Application.h"
+#include "Config.h"
+#include "Native.h"
+#include "Random.h"
+#include "ResourceHolder.h"
+#include "Simulation.h"
 
 Application::Application(const Config& config)
 	: m_window({ config.windowSize.x, config.windowSize.y }, "Cellular Automaton")
@@ -30,23 +28,21 @@ Application::Application(const Config& config)
 
 void Application::run()
 {
+	//uncomment for recording population changes to files, used for drawing graphs
 	//Simulation::openFiles();
-	unsigned count = 0;
 	sf::Clock deltaClock;
 	unsigned year = 0;
 	m_window.setKeyRepeatEnabled(false);
-	while (m_window.isOpen() && count <= 5000) {
+	while (m_window.isOpen() && year <= 5000)
+	{
 		m_guiText.setString("Generation: " + std::to_string(year++));
 		m_fpsCounter.update();
 
-		input(deltaClock.restart().asSeconds());
+		step(deltaClock.restart().asSeconds());
 		m_automaton->update();
 
 		render();
 		pollEvents();
-
-		count++;
-		//std::cout << count << "\n";
 	}
 	//Simulation::closeFiles();
 }
@@ -63,43 +59,36 @@ void Application::pollEvents()
 	{
 		m_automaton->input(e);
 		m_keyboard.update(e);
-		switch (e.type) {
-		case sf::Event::Closed:
-			m_window.close();
-			break;
+		switch (e.type)
+		{
+			case sf::Event::Closed:
+				m_window.close();
+				break;
 		}
 	}
 }
 
-void Application::input(float dt)
+void Application::step(float dt)
 {
 	float speed = 250;
 	sf::Vector2f change;
-	if (m_keyboard.isKeyDown(sf::Keyboard::W)) {
+	if (m_keyboard.isKeyDown(sf::Keyboard::W))
 		change.y -= speed;
-	}
-	else if (m_keyboard.isKeyDown(sf::Keyboard::S)) {
+	if (m_keyboard.isKeyDown(sf::Keyboard::S))
 		change.y += speed;
-	}
-	if (m_keyboard.isKeyDown(sf::Keyboard::A)) {
+	if (m_keyboard.isKeyDown(sf::Keyboard::A))
 		change.x -= speed;
-	}
-	else if (m_keyboard.isKeyDown(sf::Keyboard::D)) {
+	if (m_keyboard.isKeyDown(sf::Keyboard::D))
 		change.x += speed;
-	}
 
-	if (m_keyboard.isKeyDown(sf::Keyboard::P)) {
-		//std::thread(&Application::makeImage, this).detach();
-	}
-	if (m_keyboard.isKeyDown(sf::Keyboard::Up)) {
+	/*if (m_keyboard.isKeyDown(sf::Keyboard::P))
+		std::thread(&Application::makeImage, this).detach();*/
+	if (m_keyboard.isKeyDown(sf::Keyboard::Up))
 		m_view.zoom(0.95f);
-	}
-	if (m_keyboard.isKeyDown(sf::Keyboard::Down)) {
+	if (m_keyboard.isKeyDown(sf::Keyboard::Down))
 		m_view.zoom(1.05f);
-	}
-	if (m_keyboard.isKeyDown(sf::Keyboard::R)) {
+	if (m_keyboard.isKeyDown(sf::Keyboard::R))
 		resetView();
-	}
 
 	m_view.move(change * dt);
 }
@@ -124,7 +113,7 @@ void Application::render()
 void Application::resetView()
 {
 	m_view = sf::View();
-	m_view.setCenter({ (float)m_pConfig->windowSize.x / 2,  (float)m_pConfig->windowSize.y / 2 });
-	m_view.setSize({ (float)m_pConfig->windowSize.x,        (float)m_pConfig->windowSize.y });
+	m_view.setCenter({ (float)m_pConfig->windowSize.x / 2, (float)m_pConfig->windowSize.y / 2 });
+	m_view.setSize({ (float)m_pConfig->windowSize.x, (float)m_pConfig->windowSize.y });
 }
 

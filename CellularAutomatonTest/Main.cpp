@@ -1,11 +1,10 @@
-#include "Application.h"
-#include "./Config.h"
-
-#include "./Simulation.h"
-
 #include <iostream>
 #include <fstream>
-#include "./Native.h"
+
+#include "Application.h"
+#include "Config.h"
+#include "Native.h"
+#include "Simulation.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -21,20 +20,20 @@ namespace
 #endif
 	}
 
-	constexpr int NUM_OPTIONS = 2;
 	Config config;
 
 	void loadConfig()
 	{
 		std::ifstream inFile("config.txt");
-		if (!inFile.is_open()) {
+		if (!inFile.is_open())
+		{
 			std::cout << "Unable to load config, making default settings\n";
-			config =
-			{ { 1000, 1000 }, 4 };
+			config = { { 1000, 1000 }, 4 };
 			return;
 		}
 		std::string line;
-		while (std::getline(inFile, line)) {
+		while (std::getline(inFile, line))
+		{
 			if (line == "fps") inFile >> config.fps;
 			else if (line == "winx") inFile >> config.windowSize.x;
 			else if (line == "winy") inFile >> config.windowSize.y;

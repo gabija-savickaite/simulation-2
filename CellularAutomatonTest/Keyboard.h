@@ -4,7 +4,8 @@
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Window/Event.hpp>
 
-class Keyboard {
+class Keyboard
+{
 public:
 	Keyboard();
 

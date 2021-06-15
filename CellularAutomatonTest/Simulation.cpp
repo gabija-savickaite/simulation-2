@@ -15,7 +15,8 @@ static std::ofstream populationS("C:/Users/gs1n15/Documents/populations/populati
 
 static unsigned long x = 123456789, y = 362436069, z = 521288629;
 
-unsigned long xorshf96(void) {          //period 2^96-1
+unsigned long xorshf96(void)          //period 2^96-1
+{
 	unsigned long t;
 	x ^= x << 16;
 	x ^= x >> 5;
@@ -29,14 +30,14 @@ unsigned long xorshf96(void) {          //period 2^96-1
 	return z;
 }
 
-Simulation::Simulation(const Config & config, const Application& app)
+Simulation::Simulation(const Config& config, const Application& app)
 	: CellularAutomaton(config, app)
 {
 	tau = 0.75;
 	delta_c = 0.3333;
 	delta_r = 0.3125;
 	delta_s0 = 0.25;
-	sf::Color colours[4]
+	sf::Color colours[NUM_CELL_TYPES]
 	{
 		sf::Color::Red,
 		sf::Color::Green,
@@ -56,9 +57,9 @@ Simulation::Simulation(const Config & config, const Application& app)
 
 	});
 
-	populationC.open("C:/Users/gs1n15/Documents/populations/populationC.txt");
-	populationR.open("C:/Users/gs1n15/Documents/populations/populationR.txt");
-	populationS.open("C:/Users/gs1n15/Documents/populations/populationS.txt");
+	populationC.open("populations/populationC.txt");
+	populationR.open("populations/populationR.txt");
+	populationS.open("populations/populationS.txt");
 }
 
 static std::chrono::high_resolution_clock::time_point t0 = std::chrono::high_resolution_clock::now();
@@ -78,9 +79,9 @@ static unsigned countC, countR, countS, countE;
 
 void Simulation::openFiles()
 {
-	populationC.open("C:/Users/gs1n15/Documents/populations/populationC.txt");
-	populationR.open("C:/Users/gs1n15/Documents/populations/populationR.txt");
-	populationS.open("C:/Users/gs1n15/Documents/populations/populationS.txt");
+	populationC.open("populations/populationC.txt");
+	populationR.open("populations/populationR.txt");
+	populationS.open("populations/populationS.txt");
 }
 
 void Simulation::closeFiles()
@@ -113,9 +114,9 @@ void Simulation::countPopulations()
 		}
 	});
 
-	/*populationC.open("C:/Users/gs1n15/Documents/populations/populationC.txt", std::ios_base::app);
-	populationR.open("C:/Users/gs1n15/Documents/populations/populationR.txt", std::ios_base::app);
-	populationS.open("C:/Users/gs1n15/Documents/populations/populationS.txt", std::ios_base::app);
+	/*populationC.open("populations/populationC.txt", std::ios_base::app);
+	populationR.open("populations/populationR.txt", std::ios_base::app);
+	populationS.open("populations/populationS.txt", std::ios_base::app);
 
 	populationC << population_c << "\n";
 	populationR << population_r << "\n";
@@ -126,19 +127,19 @@ void Simulation::countPopulations()
 	populationS.close();*/
 }
 
-int neighbours[4];
+int neighbours[NUM_CELL_TYPES];
 
 void Simulation::count_neighbours(unsigned x, unsigned y)
 {
 	//benchmark_start();
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < NUM_CELL_TYPES; i++)
 		neighbours[i] = 0;
 
-	for (int nX = -1; nX <= 1; nX++)    //check neighbours
+	for (int nX = -1; nX <= 1; nX++) //check neighbours
 	{
 		for (int nY = -1; nY <= 1; nY++)
 		{
-			if (!(nX == 0 && nY == 0)) //Cell itself
+			if (nX != 0 || nY != 0) //cell itself
 			{
 				int newX = (nX + x) % (int)m_pConfig->simSize.x;
 				int newY = (nY + y) % (int)m_pConfig->simSize.y;
@@ -155,7 +156,6 @@ void Simulation::update()
 {
 	for (int i = 0; i < 62500; i++)
 	{
-
 		unsigned x = xorshf96() % 250;
 		unsigned y = xorshf96() % 250;
 
@@ -167,10 +167,12 @@ void Simulation::update()
 			count_neighbours(x, y);
 
 			double fractions[] =
-			{ (double)neighbours[0] / 8.0,
-				(double)neighbours[1] / 8.0,
-				(double)neighbours[2] / 8.0,
-				(double)neighbours[3] / 8.0 };
+			{
+				(double)neighbours[0] / NUM_NEIGHBOURING_CELLS,
+				(double)neighbours[1] / NUM_NEIGHBOURING_CELLS,
+				(double)neighbours[2] / NUM_NEIGHBOURING_CELLS,
+				(double)neighbours[3] / NUM_NEIGHBOURING_CELLS
+			};
 
 			double random = xorshf96() % 100 / 100.0;
 			unsigned ind;
@@ -194,7 +196,7 @@ void Simulation::update()
 			if ((double)(xorshf96() % 100) / 100.0 <= delta_r)
 				n_cells[y][x] = 3;
 		}
-		else if (cell = 2)
+		else
 		{
 			count_neighbours(x, y);
 			double prob = delta_s0 + tau * ((double)neighbours[0] / 8.0);

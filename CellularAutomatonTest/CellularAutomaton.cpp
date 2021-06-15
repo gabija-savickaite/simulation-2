@@ -1,22 +1,23 @@
-#include "CellularAutomaton.h"
-
 #include <iostream>
-#include "./Native.h"
+
+#include "CellularAutomaton.h"
+#include "Native.h"
 
 CellularAutomaton::CellularAutomaton(const Config& config, const Application& app)
 	: m_pConfig(&config)
 	, m_pApplication(&app)
 {
-	m_cellVertexPoints.reserve(config.simSize.x * config.simSize.y * 4);
-	for (unsigned y = 0; y < config.simSize.y; y++) {
-		for (unsigned x = 0; x < config.simSize.x; x++) {
+	m_cellVertexPoints.reserve(config.simSize.x * config.simSize.y * config.cellSize);
+	for (unsigned y = 0; y < config.simSize.y; y++)
+	{
+		for (unsigned x = 0; x < config.simSize.x; x++)
+		{
 			addQuad(x, y);
 		}
 	}
-
 }
 
-void CellularAutomaton::render(sf::RenderWindow & window)
+void CellularAutomaton::render(sf::RenderWindow& window)
 {
 	onRenderCells(window);
 	window.draw(m_cellVertexPoints.data(), m_cellVertexPoints.size(), sf::Quads);
@@ -24,19 +25,21 @@ void CellularAutomaton::render(sf::RenderWindow & window)
 	onRenderGUI(window);
 }
 
-void CellularAutomaton::makeScreenshot()
-{/*
- static int imageCount = 0;
- std::cout << "Saving image... Please hold...\n";
- std::string fileName = "Screenshots/Screenshot" + std::to_string(imageCount++) + ".png";
+/*void CellularAutomaton::makeScreenshot()
+{
+	static int imageCount = 0;
+	std::cout << "Saving image... Please hold...\n";
+	std::string fileName = "Screenshots/Screenshot" + std::to_string(imageCount++) + ".png";
 
- if (m_pixelBuffer.saveToFile(fileName)) {
- std::cout << TextColour::Green << "Saved, to file " << fileName << "! Be aware, fkuture sessions WILL OVERRIDE these images\n\n" << TextColour::Default;
- }
- else {
- std::cout << TextColour::Red << "Failed to save!\n\n" << TextColour::Default;
- }*/
-}
+	if (m_pixelBuffer.saveToFile(fileName))
+	{
+		std::cout << TextColour::Green << "Saved to file " << fileName << "! Be aware, future sessions WILL OVERRIDE these images\n\n" << TextColour::Default;
+	}
+	else
+	{
+		std::cout << TextColour::Red << "Failed to save!\n\n" << TextColour::Default;
+	}
+}*/
 
 unsigned CellularAutomaton::getCellIndex(unsigned x, unsigned y)
 {
@@ -45,8 +48,9 @@ unsigned CellularAutomaton::getCellIndex(unsigned x, unsigned y)
 
 void CellularAutomaton::setCellColour(int x, int y, sf::Color colour)
 {
-	auto index = (y * m_pConfig->simSize.x + x) * 4;
-	for (int i = 0; i < 4; i++)
+	unsigned cellSize = m_pConfig->cellSize;
+	auto index = (y * m_pConfig->simSize.x + x) * cellSize;
+	for (int i = 0; i < cellSize; i++)
 	{
 		m_cellVertexPoints[index + i].color = colour;
 	}
@@ -64,10 +68,10 @@ void CellularAutomaton::addQuad(unsigned xIndex, unsigned yIndex)
 	float pixelX = xIndex * cellSize;
 	float pixelY = yIndex * cellSize;
 
-	topLeft.position = { pixelX,               pixelY };
-	topRight.position = { pixelX + cellSize,    pixelY };
-	bottomLeft.position = { pixelX,               pixelY + cellSize };
-	bottomRight.position = { pixelX + cellSize,    pixelY + cellSize };
+	topLeft.position = { pixelX, pixelY };
+	topRight.position = { pixelX + cellSize, pixelY };
+	bottomLeft.position = { pixelX, pixelY + cellSize };
+	bottomRight.position = { pixelX + cellSize, pixelY + cellSize };
 
 	topLeft.color = m_pConfig->fgColour;
 	topRight.color = m_pConfig->fgColour;

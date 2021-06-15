@@ -1,12 +1,11 @@
-#ifndef RESOURCEHOLDER_H_INCLUDED
-#define RESOURCEHOLDER_H_INCLUDED
+#pragma once
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 
 #include "ResourceManager.h"
-#include "./NonCopyable.h"
-#include "./NonMoveable.h"
+#include "NonCopyable.h"
+#include "NonMoveable.h"
 
 class ResourceHolder : public NonCopyable, public NonMovable
 {
@@ -19,5 +18,3 @@ public:
 private:
 	ResourceHolder();
 };
-
-#endif

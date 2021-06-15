@@ -1,8 +1,7 @@
-#include "FPSCounter.h"
-
-#include "./ResourceHolder.h"
-
 #include <iostream>
+
+#include "FPSCounter.h"
+#include "ResourceHolder.h"
 
 FPSCounter::FPSCounter()
 {

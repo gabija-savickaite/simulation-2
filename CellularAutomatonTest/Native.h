@@ -1,7 +1,4 @@
-#ifndef NATIVE_H_INCLUDED
-#define NATIVE_H_INCLUDED
+#pragma once
 
 #include "Win32.h"
 #include "Unix.h"
-
-#endif // NATIVE_H_INCLUDED

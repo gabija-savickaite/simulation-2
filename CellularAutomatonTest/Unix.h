@@ -1,5 +1,4 @@
-#ifndef UNIX_H_INCLUDED
-#define UNIX_H_INCLUDED
+#pragma once
 
 #include <ostream>
 
@@ -29,5 +28,3 @@ enum class TextColour
 std::ostream& operator<< (std::ostream& stream, TextColour t);
 
 #endif // __unix__ || __unix
-
-#endif // UNIX_H_INCLUDED
